@@ -172,11 +172,3 @@ Win64
 * Mod: https://github.com/CallMeDangDev/NTE-Viet-Hoa
 
 ---
-
-## 🚀 Future
-
-* GUI version (1 click update)
-* Auto detect bằng exe
-* Backup & rollback
-
----
