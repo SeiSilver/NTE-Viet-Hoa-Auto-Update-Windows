@@ -3,10 +3,10 @@ $repo = "NTE-Viet-Hoa"
 
 $api = "https://api.github.com/repos/$owner/$repo/releases/latest"
 
-# keyword Ä‘á»ƒ search app
+# keyword to search app
 $appKeyword = "Neverness To Everness"
 
-# 4 file cáº§n download
+# target files
 $targetFiles = @(
     "netbios.dll",
     "game_vi.dat",
@@ -14,7 +14,7 @@ $targetFiles = @(
 )
 
 # =========================
-# ðŸ” FIND INSTALL PATH
+# FIND INSTALL PATH
 # =========================
 function Find-InstallPath {
     param ([string]$keyword)
@@ -40,61 +40,60 @@ function Find-InstallPath {
 }
 
 # =========================
-# ðŸ” GET INSTALL PATH
+# GET INSTALL PATH
 # =========================
 $installPath = Find-InstallPath $appKeyword
 
 if (-not $installPath) {
-    Write-Host "âŒ KhÃ´ng tÃ¬m tháº¥y app"
-    $installPath = Read-Host "Nháº­p Ä‘Æ°á»ng dáº«n root game"
+    Write-Host "App not found"
+    $installPath = Read-Host "Enter game root path"
 }
 
 if (-not (Test-Path $installPath)) {
-    Write-Host "âŒ Path khÃ´ng tá»“n táº¡i!"
-    Read-Host "Nháº¥n Enter Ä‘á»ƒ thoÃ¡t..."
+    Write-Host "Path does not exist"
+    Read-Host "Press Enter to exit..."
     exit
 }
 
-Write-Host "ðŸ“‚ Root path: $installPath"
+Write-Host "Root path: $installPath"
 
 # =========================
-# ðŸ”¥ AUTO DETECT WIN64 FOLDER (BEST)
+# AUTO DETECT WIN64
 # =========================
-Write-Host "ðŸ” Searching Win64 folder..."
+Write-Host "Searching Win64 folder..."
 
 $targetPath = Get-ChildItem $installPath -Recurse -Directory -ErrorAction SilentlyContinue |
     Where-Object { $_.FullName -like "*\Client\WindowsNoEditor\HT\Binaries\Win64" } |
     Select-Object -First 1 -ExpandProperty FullName
 
 if (-not $targetPath) {
-    Write-Host "âŒ KhÃ´ng auto detect Ä‘Æ°á»£c folder Win64"
-    $targetPath = Read-Host "Nháº­p path Win64"
+    Write-Host "Cannot auto detect Win64 folder"
+    $targetPath = Read-Host "Enter Win64 path"
 }
 
 # =========================
-# ðŸ” VALIDATE FOLDER
+# VALIDATE FOLDER
 # =========================
 if (-not (Test-Path $targetPath)) {
-    Write-Host "âŒ Target path khÃ´ng tá»“n táº¡i!"
-    Read-Host "Nháº¥n Enter Ä‘á»ƒ thoÃ¡t..."
+    Write-Host "Target path does not exist"
+    Read-Host "Press Enter to exit..."
     exit
 }
 
-# check cÃ³ exe (dáº¥u hiá»‡u folder game Ä‘Ãºng)
-$exeFile = Get-ChildItem $targetPath -Filter "*.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+$exeFile = Get-ChildItem $targetPath -Filter "HTGame.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
 
 if (-not $exeFile) {
-    Write-Host "âŒ KhÃ´ng tÃ¬m tháº¥y file .exe â†’ cÃ³ thá»ƒ sai folder"
-    Write-Host "ðŸ“‚ Target: $targetPath"
-    Read-Host "Nháº¥n Enter Ä‘á»ƒ thoÃ¡t..."
+    Write-Host "No .exe found. Wrong folder?"
+    Write-Host "Target: $targetPath"
+    Read-Host "Press Enter to exit..."
     exit
 }
 
-Write-Host "ðŸ“‚ Target path: $targetPath"
-Write-Host "ðŸŽ® Detected exe: $($exeFile.Name)"
+Write-Host "Target path: $targetPath"
+Write-Host "Detected exe: $($exeFile.Name)"
 
 # =========================
-# ðŸ”„ CHECK VERSION
+# CHECK VERSION
 # =========================
 Write-Host "Checking latest version..."
 
@@ -102,7 +101,7 @@ $response = Invoke-RestMethod -Uri $api
 $latestVersion = $response.tag_name
 $versionFile = Join-Path $targetPath ".latest_version"
 
-# check mod tá»“n táº¡i chÆ°a
+# check if mod exists
 $modExists = $true
 foreach ($file in $targetFiles) {
     $fullPath = Join-Path $targetPath $file
@@ -112,7 +111,7 @@ foreach ($file in $targetFiles) {
     }
 }
 
-# Ä‘á»c version tá»« folder game
+# read version
 if (Test-Path $versionFile) {
     $currentVersion = Get-Content $versionFile
 } else {
@@ -123,19 +122,18 @@ Write-Host "Latest: $latestVersion"
 Write-Host "Current: $currentVersion"
 Write-Host "Mod installed: $modExists"
 
-# logic chuáº©n
 if ($modExists -and $latestVersion -eq $currentVersion) {
-    Write-Host "No new version. Skip download."
-    Read-Host "Nháº¥n Enter Ä‘á»ƒ thoÃ¡t..."
+    Write-Host "No update needed"
+    Read-Host "Press Enter to exit..."
     exit
 }
 
 if (-not $modExists) {
-    Write-Host "âš ï¸ Mod chÆ°a Ä‘Æ°á»£c cÃ i â†’ sáº½ download"
+    Write-Host "Mod not installed. Will download"
 }
 
 # =========================
-# âœ… STRICT CHECK FILE
+# STRICT CHECK FILE
 # =========================
 $foundFiles = @()
 
@@ -146,15 +144,15 @@ foreach ($asset in $response.assets) {
 }
 
 if ($foundFiles.Count -ne $targetFiles.Count) {
-    Write-Host "âŒ ERROR: Missing required files!"
+    Write-Host "ERROR: Missing required files"
     Write-Host "Expected: $($targetFiles -join ', ')"
     Write-Host "Found: $($foundFiles -join ', ')"
-    Read-Host "Nháº¥n Enter Ä‘á»ƒ thoÃ¡t..."
+    Read-Host "Press Enter to exit..."
     exit
 }
 
 # =========================
-# ðŸ§¹ DELETE OLD FILES
+# DELETE OLD FILES
 # =========================
 Write-Host "Cleaning old files..."
 
@@ -168,9 +166,9 @@ foreach ($file in $targetFiles) {
 }
 
 # =========================
-# â¬‡ï¸ DOWNLOAD FILES
+# DOWNLOAD FILES
 # =========================
-Write-Host "Downloading new files..."
+Write-Host "Downloading..."
 
 foreach ($asset in $response.assets) {
     if ($targetFiles -contains $asset.name) {
@@ -184,13 +182,13 @@ foreach ($asset in $response.assets) {
 }
 
 # =========================
-# ðŸ’¾ SAVE VERSION
+# SAVE VERSION
 # =========================
 $latestVersion | Out-File $versionFile -Encoding utf8
 
-Write-Host "âœ… Done! Updated to version $latestVersion"
+Write-Host "Done! Updated to version $latestVersion"
 
 for ($i = 5; $i -gt 0; $i--) {
-    Write-Host "â³ Closing in $i..."
+    Write-Host "Closing in $i..."
     Start-Sleep -Seconds 1
 }
