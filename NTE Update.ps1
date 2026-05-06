@@ -10,8 +10,7 @@ $appKeyword = "Neverness To Everness"
 $targetFiles = @(
     "netbios.dll",
     "game_vi.dat",
-    "viet_font.ttf",
-    "version.dll"
+    "viet_font.ttf"
 )
 
 # =========================
