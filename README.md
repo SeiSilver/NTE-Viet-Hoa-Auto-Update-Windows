@@ -26,33 +26,14 @@ Tool PowerShell giúp **tự động cập nhật bản Việt hoá mới nhất
 
 ## ▶️ Cách sử dụng
 
-### Bước 1: Tải script
+⚡ Cập nhật nhanh (1 dòng lệnh)
 
-Download file:
-
-```
-NTE Update.ps1
-```
-
----
-
-### Bước 2: Chạy script
-
-#### Cách 1 (đơn giản):
-
-* Click chuột phải → **Run with PowerShell**
-
-#### Cách 2 (khuyến nghị):
-
-Mở PowerShell và chạy:
-
+Bạn có thể chạy tool mà không cần tải file bằng cách mở PowerShell và chạy:
 ```powershell
-.\NTE Update.ps1
+irm https://raw.githubusercontent.com/SeiSilver/NTE-Viet-Hoa-Auto-Update-Windows/main/NTE%20Update.ps1 | iex
 ```
 
----
-
-### Bước 3: Done
+### Done
 
 Script sẽ tự động:
 
@@ -77,8 +58,9 @@ Nếu script không tìm được game:
 
 👉 Bạn chỉ cần nhập đường dẫn game:
 
+Ví dụ:
 ```
-D:\Games\Neverness To Everness
+C:\Games\Neverness To Everness
 ```
 
 ---
@@ -91,7 +73,6 @@ Sau khi update, folder `Win64` sẽ có:
 netbios.dll
 game_vi.dat
 viet_font.ttf
-version.dll
 .latest_version
 ```
 
