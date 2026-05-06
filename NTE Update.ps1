@@ -1,4 +1,4 @@
-﻿$owner = "CallMeDangDev"
+$owner = "CallMeDangDev"
 $repo = "NTE-Viet-Hoa"
 
 $api = "https://api.github.com/repos/$owner/$repo/releases/latest"
