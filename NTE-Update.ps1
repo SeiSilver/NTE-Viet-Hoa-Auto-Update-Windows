@@ -1,7 +1,7 @@
-﻿$owner = "CallMeDangDev"
+$owner = "CallMeDangDev"
 $repo = "NTE-Viet-Hoa"
-
 $api = "https://api.github.com/repos/$owner/$repo/releases/latest"
+Write-Host $api
 
 # keyword to search app
 $appKeyword = "Neverness To Everness"
@@ -188,7 +188,4 @@ $latestVersion | Out-File $versionFile -Encoding utf8
 
 Write-Host "Done! Updated to version $latestVersion"
 
-for ($i = 5; $i -gt 0; $i--) {
-    Write-Host "Closing in $i..."
-    Start-Sleep -Seconds 1
-}
+Read-Host "Press Enter to exit..."
