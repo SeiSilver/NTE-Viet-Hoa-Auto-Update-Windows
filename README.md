@@ -20,7 +20,7 @@ Tool PowerShell giúp **tự động cập nhật bản Việt hoá mới nhất
 Mở PowerShell và chạy:
 
 ```powershell
-irm https://raw.githubusercontent.com/SeiSilver/NTE-Viet-Hoa-Auto-Update-Windows/main/NTE%20Update.ps1 | iex
+irm https://raw.githubusercontent.com/SeiSilver/NTE-Viet-Hoa-Auto-Update-Windows/main/NTE-Update.ps1 | iex
 ```
 
 ---
@@ -87,7 +87,7 @@ viet_font.ttf
 2. Dán:
 
 ```
-powershell -Command "irm https://raw.githubusercontent.com/SeiSilver/NTE-Viet-Hoa-Auto-Update-Windows/main/NTE%20Update.ps1 | iex"
+powershell -Command "irm https://raw.githubusercontent.com/SeiSilver/NTE-Viet-Hoa-Auto-Update-Windows/main/NTE-Update.ps1 | iex"
 ```
 
 3. Đặt tên → Finish
