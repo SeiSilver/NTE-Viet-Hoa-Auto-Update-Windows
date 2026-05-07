@@ -188,4 +188,7 @@ $latestVersion | Out-File $versionFile -Encoding utf8
 
 Write-Host "Done! Updated to version $latestVersion"
 
-Read-Host "Press Enter to exit..."
+for ($i = 3; $i -gt 0; $i--) {
+    Write-Host "Closing in $i..."
+    Start-Sleep -Seconds 1
+}
